@@ -20,7 +20,9 @@ namespace RedditRoulette.ViewModel
         private RedditPost _currentPost;
         private string _selectedSubreddit;
         private string _subredditInput;
-
+        private double _headerFontSizeProperty;
+        private double _listFontSizeProperty;
+        private double _labelFontSizeProperty;
 
         public RedditPost CurrentPost
         {
@@ -55,6 +57,34 @@ namespace RedditRoulette.ViewModel
             }
         }
 
+        public double HeaderFontSizeProperty
+        {
+            get => _headerFontSizeProperty;
+            set
+            {
+                _headerFontSizeProperty = value;
+                OnPropertyChanged(nameof(HeaderFontSizeProperty));
+            }
+        }
+        public double ListFontSizeProperty
+        {
+            get => _listFontSizeProperty;
+            set
+            {
+                _listFontSizeProperty = value;
+                OnPropertyChanged(nameof(ListFontSizeProperty));
+            }
+        }
+        public double LabelFontSizeProperty
+        {
+            get => _labelFontSizeProperty;
+            set
+            {
+                _labelFontSizeProperty = value;
+                OnPropertyChanged(nameof(LabelFontSizeProperty));
+            }
+        }
+
         public ICommand AddSubredditCommand { get; }
         public ICommand GetRandomPostCommand { get; }
         public ICommand DeleteSubredditCommand { get; }
@@ -74,7 +104,9 @@ namespace RedditRoulette.ViewModel
             ClearSelectionCommand = new Command(ClearSelection);
             OpenPostCommand = new Command(OpenPost);
 
-
+            HeaderFontSizeProperty = 28;
+            ListFontSizeProperty = 15;
+            LabelFontSizeProperty = 20;
 
             LoadSubreddits();
         }

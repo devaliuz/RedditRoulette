@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text.Json;
+using System.Threading.Tasks;
 using RedditRoulette.Model;
-using RedditRoulette.Services;
-using RedditRoulette.ViewModel;
-
 
 namespace RedditRoulette.Services
 {
@@ -18,49 +17,44 @@ namespace RedditRoulette.Services
         public RedditApiService()
         {
             _httpClient = new HttpClient();
-            _httpClient.DefaultRequestHeaders.Add("User-Agent", "YourAppName/1.0");
         }
-        //0OpBSn8-VS_6Ms1YQaI5uQ
-        //PostRoulette
+
+
         public async Task<RedditPost> GetRandomPost(string subreddit)
         {
-            var response = await _httpClient.GetFromJsonAsync<List<RedditApiResponse>>($"https://www.reddit.com/r/{subreddit}/random.json");
-            var post = response[0].Data.Children[0].Data;
+            string auth = "eyJhbGciOiJSUzI1NiIsImtpZCI6IlNIQTI1NjpzS3dsMnlsV0VtMjVmcXhwTU40cWY4MXE2OWFFdWFyMnpLMUdhVGxjdWNZIiwidHlwIjoiSldUIn0.eyJzdWIiOiJ1c2VyIiwiZXhwIjoxNzIwOTU1NTQxLjQwMzQ3NywiaWF0IjoxNzIwODY5MTQxLjQwMzQ3NywianRpIjoib1RYS0YybnZ4cHJnRHdZMTNHa2VzVW9ycWlXTkR3IiwiY2lkIjoiSnRORWQ1RWktLXJvVUFnN1d1ck9TZyIsImxpZCI6InQyX2IyOHl2MDlwcyIsImFpZCI6InQyX2IyOHl2MDlwcyIsImxjYSI6MTY4MzgwNDA5NTAwMCwic2NwIjoiZUp5S1Z0SlNpZ1VFQUFEX193TnpBU2MiLCJmbG8iOjl9.lQZ-KU0CNJWfw40ehnl9atmX7amtdZ5yiGCetvrr8Js7NmLB2Le37Z4GNx2l5e9h6BakKbpJEv1pnTgOls18SqJkLfok7LqIwjInpDHv8DSHitQuj5iid3gDnO0aPZITcoJPAUx_LiOLjQOLk5OWKlyJPaZd8q6bMrvOhNNyCeWXGO16w2X8Siq0Z1sumgIT3c3lb_NzMBlfQCBeUwy8RV_PTTmz_4kc8PYlU2LnmiXyEhz31Em63R-ICvt5fvwpBDcfBpdyruCJhXrYrBh5kHMgSiAFTJEV_HOrbzjkjP9WgI6_1U7v0yc0YD5-WazqG2_zZvUx51qy0ELjj2eM0g";
+            
+            _httpClient.DefaultRequestHeaders.Add("User-Agent", "RoulettePost/1.0");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer",auth);
+            // Empfangen der JSON-Antwort als String
+            //var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+            string jsonResponse = /*await*/ _httpClient.GetStringAsync($"https://oauth.reddit.com/{subreddit}/random"/*, cts.Token*/).Result;
+            string x = jsonResponse;
+            // Hier können Sie jsonResponse überprüfen oder loggen, falls nötig
 
-            return new RedditPost
+            var options = new JsonSerializerOptions
             {
-                Title = post.Title,
-                Author = post.Author,
-                Subreddit = post.Subreddit,
-                Url = post.Url,
-                Thumbnail = post.Thumbnail,
-                Selftext = post.Selftext
+                PropertyNameCaseInsensitive = true
             };
+
+            if (!string.IsNullOrEmpty(jsonResponse))
+            {
+                var response = JsonSerializer.Deserialize<List<RedditApiResponse>>(jsonResponse, options);
+
+                if (response != null && response.Count > 0 &&
+                    response[0].Data?.Children != null &&
+                    response[0].Data.Children.Count > 0)
+                {
+                    var post = response[0].Data.Children[0].Data;
+
+                    return new RedditPost
+                    {
+                        Url = $"https://www.reddit.com/media?url={post.Url}"
+                    };
+                }
+            }
+
+            return null;
         }
-    }
-
-    public class RedditApiResponse
-    {
-        public RedditData Data { get; set; }
-    }
-
-    public class RedditData
-    {
-        public List<RedditChild> Children { get; set; }
-    }
-
-    public class RedditChild
-    {
-        public RedditChildData Data { get; set; }
-    }
-
-    public class RedditChildData
-    {
-        public string Title { get; set; }
-        public string Author { get; set; }
-        public string Subreddit { get; set; }
-        public string Url { get; set; }
-        public string Thumbnail { get; set; }
-        public string Selftext { get; set; }
     }
 }
