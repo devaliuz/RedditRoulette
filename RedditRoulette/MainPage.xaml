@@ -3,21 +3,19 @@
              x:Class="RedditRoulette.MainPage"
              xmlns:helpers="clr-namespace:RedditRoulette.Helpers"
              xmlns:converter="clr-namespace:RedditRoulette.Converters"
+             BackgroundColor="{StaticResource TertiaryColor}"
              >
     <ContentPage.Resources>
         <converter:HeightConverter x:Key="HeightConverter"/>
         <converter:FontSizeConverter x:Key="FontSizeConverter"/>
         <converter:TextTruncationConverter x:Key="TextTruncationConverter"/>
+        <converter:ListNotEmptyToBoolConverter x:Key="ListNotEmptyToBoolConverter"/>
+        <converter:MoreThanOneItemToBoolConverter x:Key="MoreThanOneItemToBoolConverter"/>
+        <converter:ItemCountToHeightConverter x:Key="ItemCountToHeightConverter"/>
     </ContentPage.Resources>
 
     <ScrollView>
         <VerticalStackLayout Spacing="25" Padding="30">
-
-            <!--<Button Text="🔑"
-                    Command="{Binding ShowApiKeyEntryCommand}"
-                    HorizontalOptions="End"/>-->
-
-            <!--{Binding HeaderFontSizeProperty, Converter={StaticResource FontSizeConverter}}-->
             <Label Text="Reddit Roulette" FontSize="Header" HorizontalOptions="Center" TextColor="{StaticResource PrimaryColor}" />
 
             <Frame BorderColor="{StaticResource PrimaryColor}" Padding="5" CornerRadius="10">
@@ -26,20 +24,45 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <!--{Binding LabelFontSizeProperty, Converter={StaticResource FontSizeConverter}}-->
                     <Label Text="r/" VerticalOptions="Center" FontSize="Medium" Margin="5,0,0,0" TextColor="{StaticResource PrimaryColor}"/>
                     <Entry x:Name="SubredditEntry" 
-                           Grid.Column="1" 
-                           Placeholder="enter subreddit name"
-                           PlaceholderColor="Gray"
-                           Text="{Binding SubredditInput}"
-                           Focused="OnSubredditEntryFocused"
-                           Unfocused="OnSubredditEntryUnfocused"/>
+                   Grid.Column="1" 
+                   Placeholder="enter subreddit name"
+                   PlaceholderColor="Gray"
+                   Text="{Binding SubredditInput}"/>
                 </Grid>
             </Frame>
+
+            <Frame BorderColor="{StaticResource PrimaryColor}" 
+                   BackgroundColor="{StaticResource TertiaryColor}"
+                   Padding="5" 
+                   CornerRadius="10"
+                   IsVisible="{Binding SubredditSuggestions.Count, Converter={StaticResource MoreThanOneItemToBoolConverter}}"> 
+                <VerticalStackLayout>
+                    <CollectionView ItemsSource="{Binding SubredditSuggestions}"
+                        HeightRequest="{Binding SubredditSuggestions.Count, Converter={StaticResource ItemCountToHeightConverter}}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Margin="2" Padding="10" BackgroundColor="{StaticResource TertiaryColor}">
+                                    <Label Text="{Binding}"
+                               TextColor="{StaticResource TextColor}">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer 
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectSuggestionCommand}"
+                                    CommandParameter="{Binding}" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Frame>
+
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
                 <Button Text="Add Subreddit" 
@@ -58,8 +81,8 @@
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="10*"/>
-                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="15*"/>
+                    <ColumnDefinition Width="6*"/>
                 </Grid.ColumnDefinitions>
 
                 <Frame IsVisible="{Binding CurrentPost, Converter={StaticResource NotNullToBoolConverter}}"
@@ -93,10 +116,11 @@
                                         <Label Text="{Binding Converter={StaticResource TextTruncationConverter}}" 
                                                VerticalOptions="Center" 
                                                LineBreakMode="TailTruncation" 
-                                               MaxLines="1"/>
+                                               MaxLines="1"
+                                               FontSize="Micro"/>
                                         <Button Grid.Column="1"
                                         Text="✕"
-                                        TextColor="{StaticResource InverseTextColor}"
+                                        TextColor="{StaticResource TextColor}"
                                         BackgroundColor="{StaticResource PrimaryColor}"
                                         CornerRadius="15"
                                         WidthRequest="30"

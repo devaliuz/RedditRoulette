@@ -10,7 +10,7 @@
             <!-- Reddit Orange -->
             <Color x:Key="SecondaryColor">#1A1A1B</Color>
             <!-- Dark Gray (almost black) -->
-            <Color x:Key="TertiaryColor">#272729</Color>
+            <Color x:Key="TertiaryColor">#292929</Color>
             <!-- Slightly lighter gray for contrast -->
             <Color x:Key="TextColor">#FFFFFF</Color>
             <!-- White -->

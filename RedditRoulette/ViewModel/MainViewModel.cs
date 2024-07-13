@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Windows.Input;
 using RedditRoulette.Services;
 using RedditRoulette.Model;
+using System.Diagnostics;
 
 
 namespace RedditRoulette.ViewModel
@@ -17,12 +18,15 @@ namespace RedditRoulette.ViewModel
         private readonly RedditApiService _redditApiService;
         private readonly FileService _fileService;
         public ObservableCollection<string> Subreddits { get; } = new ObservableCollection<string>();
+        private ObservableCollection<string> _subredditSuggestions = new ObservableCollection<string>();
         private RedditPost _currentPost;
         private string _selectedSubreddit;
         private string _subredditInput;
         private double _headerFontSizeProperty;
         private double _listFontSizeProperty;
         private double _labelFontSizeProperty;
+        private CancellationTokenSource _suggestionCts;
+
 
         public RedditPost CurrentPost
         {
@@ -54,6 +58,7 @@ namespace RedditRoulette.ViewModel
             {
                 _subredditInput = value;
                 OnPropertyChanged(nameof(SubredditInput));
+                UpdateSubredditSuggestions(value);
             }
         }
 
@@ -85,11 +90,26 @@ namespace RedditRoulette.ViewModel
             }
         }
 
+        public ObservableCollection<string> SubredditSuggestions
+        {
+            get => _subredditSuggestions;
+            set
+            {
+                if (_subredditSuggestions != value)
+                {
+                    _subredditSuggestions = value;
+                    OnPropertyChanged(nameof(SubredditSuggestions));
+                }
+            }
+        }
+
         public ICommand AddSubredditCommand { get; }
         public ICommand GetRandomPostCommand { get; }
         public ICommand DeleteSubredditCommand { get; }
         public ICommand ClearSelectionCommand { get; }
         public ICommand OpenPostCommand { get; }
+        public ICommand SelectSuggestionCommand { get; }
+
 
 
 
@@ -103,6 +123,7 @@ namespace RedditRoulette.ViewModel
             DeleteSubredditCommand = new Command<string>(DeleteSubreddit);
             ClearSelectionCommand = new Command(ClearSelection);
             OpenPostCommand = new Command(OpenPost);
+            SelectSuggestionCommand = new Command<string>(SelectSuggestion);
 
             HeaderFontSizeProperty = 28;
             ListFontSizeProperty = 15;
@@ -184,6 +205,62 @@ namespace RedditRoulette.ViewModel
         {
             SelectedSubreddit = null;
             CurrentPost = null;
+        }
+
+        private async void UpdateSubredditSuggestions(string query)
+        {
+            Debug.WriteLine($"UpdateSubredditSuggestions called with query: {query}");
+
+            if (string.IsNullOrWhiteSpace(query) || query.Length < 2)
+            {
+                ClearSuggestions();
+                return;
+            }
+
+            _suggestionCts?.Cancel();
+            _suggestionCts = new CancellationTokenSource();
+
+            try
+            {
+                await Task.Delay(1500, _suggestionCts.Token);
+                var suggestions = await _redditApiService.GetSubreddits(query);
+
+                if (!_suggestionCts.IsCancellationRequested)
+                {
+                    await Device.InvokeOnMainThreadAsync(() =>
+                    {
+                        SubredditSuggestions.Clear();
+                        // Nehmen Sie nur die Top 4 Vorschläge
+                        foreach (var suggestion in suggestions.Take(4))
+                        {
+                            SubredditSuggestions.Add(suggestion);
+                        }
+                        OnPropertyChanged(nameof(SubredditSuggestions));
+                    });
+                }
+            }
+            catch (TaskCanceledException)
+            {
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        private void ClearSuggestions()
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                SubredditSuggestions.Clear();
+                OnPropertyChanged(nameof(SubredditSuggestions));
+            });
+        }
+
+        private void SelectSuggestion(string suggestion)
+        {
+            SubredditInput = suggestion.TrimStart('r', '/');
+            SubredditSuggestions.Clear();
+            OnPropertyChanged(nameof(SubredditSuggestions));
         }
 
 
