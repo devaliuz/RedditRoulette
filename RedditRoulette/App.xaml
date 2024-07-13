@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:RedditRoulette"
+             xmlns:converters="clr-namespace:RedditRoulette.Converters"
+             x:Class="RedditRoulette.App">
+    <Application.Resources>
+        <ResourceDictionary>
+            <Color x:Key="PrimaryColor">#FF4500</Color>
+            <!-- Reddit Orange -->
+            <Color x:Key="SecondaryColor">#1A1A1B</Color>
+            <!-- Dark Gray (almost black) -->
+            <Color x:Key="TertiaryColor">#272729</Color>
+            <!-- Slightly lighter gray for contrast -->
+            <Color x:Key="TextColor">#FFFFFF</Color>
+            <!-- White -->
+            <Color x:Key="InverseTextColor">#000000</Color>
+            <!-- Black -->
+
+            <Style TargetType="ContentPage">
+                <Setter Property="BackgroundColor" Value="{StaticResource SecondaryColor}" />
+            </Style>
+
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource TextColor}" />
+            </Style>
+
+            <Style TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor}" />
+                <Setter Property="TextColor" Value="{StaticResource InverseTextColor}" />
+            </Style>
+
+            <Style TargetType="Entry">
+                <Setter Property="BackgroundColor" Value="{StaticResource TertiaryColor}" />
+                <Setter Property="TextColor" Value="{StaticResource TextColor}" />
+            </Style>
+
+            <Style TargetType="Frame">
+                <Setter Property="BackgroundColor" Value="{StaticResource TertiaryColor}" />
+                <Setter Property="BorderColor" Value="{StaticResource PrimaryColor}" />
+            </Style>
+
+            <converters:StringToBoolConverter x:Key="StringToBoolConverter" />
+            <converters:NotNullToBoolConverter x:Key="NotNullToBoolConverter" />
+            <converters:SelectedItemConverter x:Key="SelectedItemConverter" />
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
