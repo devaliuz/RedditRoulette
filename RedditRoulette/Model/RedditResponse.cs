@@ -2,8 +2,11 @@
 
 namespace RedditRoulette.Model
 {
-    public class RedditApiResponse
+    public class RedditResponse
     {
+        [JsonPropertyName("kind")]
+        public string Kind { get; set; }
+
         [JsonPropertyName("data")]
         public RedditData Data { get; set; }
     }

@@ -17,7 +17,7 @@ namespace RedditRoulette.ViewModel
         private readonly RedditApiService _redditApiService;
         private readonly FileService _fileService;
         private ObservableCollection<string> _subredditSuggestions = new ObservableCollection<string>();
-        private RedditPost _currentPost;
+        private RedditChildData _currentPost;
         private string _selectedSubreddit;
         private string _subredditInput;
         private double _headerFontSizeProperty;
@@ -39,7 +39,7 @@ namespace RedditRoulette.ViewModel
         /// <summary>
         /// Gets or sets the current Reddit post being displayed.
         /// </summary>
-        public RedditPost CurrentPost
+        public RedditChildData CurrentPost
         {
             get => _currentPost;
             set
@@ -311,7 +311,7 @@ namespace RedditRoulette.ViewModel
         /// </summary>
         private async void OpenPost()
         {
-            if (CurrentPost != null)
+            if (CurrentPost != null && !string.IsNullOrEmpty(CurrentPost.Url))
             {
                 await Browser.OpenAsync(CurrentPost.Url, BrowserLaunchMode.SystemPreferred);
             }
@@ -351,6 +351,7 @@ namespace RedditRoulette.ViewModel
             catch (Exception ex)
             {
                 // TODO: Handle error (e.g., show an alert)
+                Debug.WriteLine($"Error fetching random post: {ex.Message}");
             }
         }
 
@@ -397,6 +398,7 @@ namespace RedditRoulette.ViewModel
             catch (Exception ex)
             {
                 // TODO: Handle error (e.g., show an alert)
+                Debug.WriteLine($"Error updating subreddit suggestions: {ex.Message}");
             }
         }
 

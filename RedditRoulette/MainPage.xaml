@@ -12,6 +12,7 @@
         <converter:ListNotEmptyToBoolConverter x:Key="ListNotEmptyToBoolConverter"/>
         <converter:MoreThanOneItemToBoolConverter x:Key="MoreThanOneItemToBoolConverter"/>
         <converter:ItemCountToHeightConverter x:Key="ItemCountToHeightConverter"/>
+        <converter:UrlToImageSourceConverter x:Key="UrlToImageSourceConverter"/>
     </ContentPage.Resources>
 
     <ScrollView>
@@ -110,6 +111,20 @@
                                     HorizontalOptions="Center" />
                     </StackLayout>
                 </Frame>
+                <!--<Frame IsVisible="{Binding CurrentPost, Converter={StaticResource NotNullToBoolConverter}}"
+                       BorderColor="{StaticResource PrimaryColor}"
+                       CornerRadius="10"
+                       Grid.Column="0"
+                       Margin="5">
+                    <StackLayout>
+                        <Image Source="{Binding ImageUrl, Converter={StaticResource UrlToImageSourceConverter}}"
+                               Aspect="AspectFit"
+                               HeightRequest="{Binding Source={x:Static helpers:ScreenHelpers.ScreenHeight}, Converter={StaticResource HeightConverter}}"/>     
+                        <Button Text="Open Post on Reddit" 
+                                Command="{Binding OpenPostCommand}"
+                                HorizontalOptions="Center" />
+                    </StackLayout>
+                </Frame>-->
                 <VerticalStackLayout
                     Grid.Column="1"
                     Margin="5">
