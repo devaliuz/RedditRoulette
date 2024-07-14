@@ -16,10 +16,10 @@ namespace RedditRoulette
     {
         private readonly MainViewModel _viewModel;
 
-        public MainPage()
+        public MainPage(MainViewModel viewModel)
         {
             InitializeComponent();
-            _viewModel = new MainViewModel(new RedditApiService(), new FileService());
+            _viewModel = viewModel;
             BindingContext = _viewModel;
         }
 
