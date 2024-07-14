@@ -411,8 +411,8 @@ namespace RedditRoulette.ViewModel
         {
             bool isInputEmpty = string.IsNullOrWhiteSpace(SubredditInput);
             string normalizedInput = isInputEmpty ? "" : $"r/{SubredditInput.TrimStart('r', '/')}";
-            bool subredditExists = !isInputEmpty && Subreddits.Contains(normalizedInput);
-            bool hasSuggestions = SubredditSuggestions.Count > 1;
+            bool subredditExists = !isInputEmpty && Subreddits.Any(subreddit => subreddit.Equals(normalizedInput, StringComparison.OrdinalIgnoreCase));
+            bool hasSuggestions = SubredditSuggestions.Count >= 1;
 
             CanAddSubreddit = !isInputEmpty && !subredditExists && hasSuggestions;
 
