@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using RedditRoulette.Services;
 
 namespace RedditRoulette
 {
@@ -15,9 +16,8 @@ namespace RedditRoulette
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-#if DEBUG
-    		builder.Logging.AddDebug();
-#endif
+            builder.Services.AddDataProtection();
+            builder.Services.AddSingleton<EncryptionService>();
 
             return builder.Build();
         }

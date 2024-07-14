@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedditRoulette", "RedditRoulette\RedditRoulette.csproj", "{004D3EE0-0BA0-4284-8818-15BC6BFA1E76}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedditRoulette", "RedditRoulette\RedditRoulette.csproj", "{004D3EE0-0BA0-4284-8818-15BC6BFA1E76}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Encrypter", "Encrypter\Encrypter.csproj", "{31B2A40E-8C89-4050-86D9-DE30789A0101}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,6 +19,10 @@ Global
 		{004D3EE0-0BA0-4284-8818-15BC6BFA1E76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{004D3EE0-0BA0-4284-8818-15BC6BFA1E76}.Release|Any CPU.Build.0 = Release|Any CPU
 		{004D3EE0-0BA0-4284-8818-15BC6BFA1E76}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{31B2A40E-8C89-4050-86D9-DE30789A0101}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31B2A40E-8C89-4050-86D9-DE30789A0101}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31B2A40E-8C89-4050-86D9-DE30789A0101}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31B2A40E-8C89-4050-86D9-DE30789A0101}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
