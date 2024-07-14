@@ -59,7 +59,7 @@ namespace RedditRoulette.Services
             List<string> subreddits = new List<string>();
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "RoulettePost/1.0");
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", _auth);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", _decryptedAuth);
 
             string baseUrl = "https://oauth.reddit.com/api/search_subreddits";
 
@@ -80,7 +80,6 @@ namespace RedditRoulette.Services
 
                 var data = JsonSerializer.Deserialize<SubredditSearchResponse>(jsonResponse, options);
 
-                // Stellen Sie sicher, dass Sie die Subreddit-Namen korrekt extrahieren
                 return data?.Subreddits
                     ?.Select(s => s.Name)
                     .Where(name => name.StartsWith(query, StringComparison.OrdinalIgnoreCase))
