@@ -15,10 +15,6 @@ namespace RedditRoulette
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
-
-            builder.Services.AddDataProtection();
-            builder.Services.AddSingleton<EncryptionService>();
-
             return builder.Build();
         }
     }

@@ -8,7 +8,7 @@ namespace RedditRoulette.Services
     public class RedditApiService
     {
         private readonly HttpClient _httpClient;
-        private readonly string auth = "eyJhbGciOiJSUzI1NiIsImtpZCI6IlNIQTI1NjpzS3dsMnlsV0VtMjVmcXhwTU40cWY4MXE2OWFFdWFyMnpLMUdhVGxjdWNZIiwidHlwIjoiSldUIn0.eyJzdWIiOiJ1c2VyIiwiZXhwIjoxNzIwOTU1NTQxLjQwMzQ3NywiaWF0IjoxNzIwODY5MTQxLjQwMzQ3NywianRpIjoib1RYS0YybnZ4cHJnRHdZMTNHa2VzVW9ycWlXTkR3IiwiY2lkIjoiSnRORWQ1RWktLXJvVUFnN1d1ck9TZyIsImxpZCI6InQyX2IyOHl2MDlwcyIsImFpZCI6InQyX2IyOHl2MDlwcyIsImxjYSI6MTY4MzgwNDA5NTAwMCwic2NwIjoiZUp5S1Z0SlNpZ1VFQUFEX193TnpBU2MiLCJmbG8iOjl9.lQZ-KU0CNJWfw40ehnl9atmX7amtdZ5yiGCetvrr8Js7NmLB2Le37Z4GNx2l5e9h6BakKbpJEv1pnTgOls18SqJkLfok7LqIwjInpDHv8DSHitQuj5iid3gDnO0aPZITcoJPAUx_LiOLjQOLk5OWKlyJPaZd8q6bMrvOhNNyCeWXGO16w2X8Siq0Z1sumgIT3c3lb_NzMBlfQCBeUwy8RV_PTTmz_4kc8PYlU2LnmiXyEhz31Em63R-ICvt5fvwpBDcfBpdyruCJhXrYrBh5kHMgSiAFTJEV_HOrbzjkjP9WgI6_1U7v0yc0YD5-WazqG2_zZvUx51qy0ELjj2eM0g";
+        private readonly string _auth = "eyJhbGciOiJSUzI1NiIsImtpZCI6IlNIQTI1NjpzS3dsMnlsV0VtMjVmcXhwTU40cWY4MXE2OWFFdWFyMnpLMUdhVGxjdWNZIiwidHlwIjoiSldUIn0.eyJzdWIiOiJ1c2VyIiwiZXhwIjoxNzIxMDQzODgwLjQ1ODMxNCwiaWF0IjoxNzIwOTU3NDgwLjQ1ODMxNCwianRpIjoiMWRNcGVZVWNacm56bG54OVV4R1RvQ01GaGxtS3J3IiwiY2lkIjoiSnRORWQ1RWktLXJvVUFnN1d1ck9TZyIsImxpZCI6InQyX2IyOHl2MDlwcyIsImFpZCI6InQyX2IyOHl2MDlwcyIsImxjYSI6MTY4MzgwNDA5NTAwMCwic2NwIjoiZUp5S1Z0SlNpZ1VFQUFEX193TnpBU2MiLCJmbG8iOjl9.jvJQJF1XpXdwbavcjxpshGZ5mWH9GWbnGyv94gmUBDQdv9nXT4Rp9zU8jX9RdnTtDpl-s-vdLiHN-Dcniv05tsBI6i-dvrLAu-jTgeIlx8aw30C1rTX9i63RhV7Xg9Z22noU9UFNER3tnpQfJJkaYfxSaClqNEf_LaxWqHuxeGS45DpZ3rzqwyRsNz-6LXzIE1YNeF4_Hk4lDWNxSwL-b7hII5HUaOLbEA3GsBv7PhMSvWPKy_GAlQBziJCkfeF5uv5y2hH9Ifc3RYNvQ2BVdDxqR62jkqjCWVRJsegPuqyIPhQbGiekWRX7MqxUawZXj8tT3BqRI1QAViF57xPLuw";
 
 
         public RedditApiService()
@@ -21,10 +21,10 @@ namespace RedditRoulette.Services
         {
             
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "RoulettePost/1.0");
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer",auth);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer",_auth);
 
 
-            string jsonResponse = /*await*/ _httpClient.GetStringAsync($"https://oauth.reddit.com/{subreddit}/random").Result;
+            string jsonResponse = _httpClient.GetStringAsync($"https://oauth.reddit.com/{subreddit}/random").Result;
             string x = jsonResponse;
 
             var options = new JsonSerializerOptions
@@ -57,12 +57,10 @@ namespace RedditRoulette.Services
             List<string> subreddits = new List<string>();
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "RoulettePost/1.0");
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", auth);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", _auth);
 
-            // Basis-URL für die Suche
             string baseUrl = "https://oauth.reddit.com/api/search_subreddits";
 
-            // Erstellen des Content für den POST-Request
             var content = new FormUrlEncodedContent(new[]
             {
         new KeyValuePair<string, string>("include_over_18", "true"),

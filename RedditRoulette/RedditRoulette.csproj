@@ -102,15 +102,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="View\ApiKeyEntryPage.xaml.cs">
-	    <DependentUpon>ApiKeyEntryPage.xaml</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <MauiXaml Update="View\ApiKeyEntryPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
+	  <Folder Include="View\" />
 	</ItemGroup>
 
 </Project>
